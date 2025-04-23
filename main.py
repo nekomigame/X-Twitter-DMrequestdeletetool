@@ -32,16 +32,26 @@ def click_img(targetimage: str = "", **kwargs):
         raise
 
 def DMdelete():
-    global combobox
     screenmode = combobox.get()
+    offset_x = int(offsetxEntry.get())
+    offset_y = int(offsetyEntry.get())
+    click_lr = clicktypeCombobox.get()
+    gray_scale = grayscaleCombobox.get()
+    if gray_scale == "ON":
+        gray_scale = True
+    else:
+        gray_scale = False
+    confidence = float(accEntry.get())
+
     if screenmode == "":
         messagebox.showerror("エラー","画面モードが選択されていません")
         return
+
     while True:
         try:
-            click_img(rf"./img/{screenmode}_batu.jpg")
+            click_img(rf"./img/{screenmode}_batu.jpg",offset_x=offset_x,offset_y=offset_y,click_lr=click_lr,gray_scale=gray_scale,confidence=confidence)
             time.sleep(0.2)
-            click_img(rf"./img/{screenmode}_delete.jpg")
+            click_img(rf"./img/{screenmode}_delete.jpg",offset_x=offset_x,offset_y=offset_y,click_lr=click_lr,gray_scale=gray_scale,confidence=confidence)
         except ImageNotFoundException:
             messagebox.showerror("ImageNotFoundException","指定された画像が見つからないため処理を停止しました")
             return
@@ -67,9 +77,6 @@ if __name__ == "__main__":
     # --- ウィンドウの基本的な設定 ---
     # タイトルバーのテキストを設定
     root.title("X(Twitter)DMリクエスト自動削除")
-
-    # ウィンドウの初期サイズを設定 (推奨しないが、初期配置の参考に)
-    # root.geometry("1000x500")
 
     # ウィンドウのリサイズを禁止 (オプション)
     root.resizable(False, False) # (幅方向, 高さ方向)
